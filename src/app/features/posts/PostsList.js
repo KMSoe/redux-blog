@@ -1,18 +1,27 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import PostAuthor from './PostAuthor';
-import { selectAllPosts } from './postsSlice';
+import { fetchPosts, selectAllPosts } from './postsSlice';
 import ReactionButtons from './ReactionButtons';
 import TimeAgo from './TimeAgo';
 
 const PostsList = () => {
+    const dispatch = useDispatch();
     const posts = useSelector(selectAllPosts);
+
+    const postStatus = useSelector(state => state.posts.status);
+
+    useEffect(() => {
+        if (postStatus === 'idle') {
+            dispatch(fetchPosts())
+        }
+    }, [postStatus, dispatch]);
 
     const renderedPosts = posts.map(post => (
         <article className="post-excerpt" key={post.id}>
             <h3>{post.title}</h3>
-            <TimeAgo timestamp={post.date} /><br /> 
+            <TimeAgo timestamp={post.date} /><br />
             <PostAuthor userId={post.user} />
             <p className="post-content">{post.content.substring(0, 100)}</p>
             <ReactionButtons post={post} />

@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice, nanoid } from '@reduxjs/toolkit';
+import {client} from '../../../api/client';
 
 // const initialState = [
 //     { id: '1', title: 'First Post!', content: 'Hello!', reactions: { thumbsUp: 0, hooray: 0, heart: 0, rocket: 0, eyes: 0 } },
