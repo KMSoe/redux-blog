@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, nanoid } from '@reduxjs/toolkit';
-import {client} from '../../../api/client';
+import { client } from '../../../api/client';
 
 // const initialState = [
 //     { id: '1', title: 'First Post!', content: 'Hello!', reactions: { thumbsUp: 0, hooray: 0, heart: 0, rocket: 0, eyes: 0 } },
@@ -54,6 +54,20 @@ const postsSlice = createSlice({
                 existingPost.reactions[reaction]++
             }
         }
+    },
+    extraReducers(builder) {
+        builder
+            .addCase(fetchPosts.pending, (state, action) => {
+                state.status = 'loading';
+            })
+            .addCase(fetchPosts.fulfilled, (state, action) => {
+                state.status = 'succeeded';
+                state.posts = state.posts.concat(action.payload)
+            })
+            .addCase(fetchPosts.rejected, (state, action) => {
+                state.status = 'error';
+                state.error = action.error.message
+            })
     }
 });
 
